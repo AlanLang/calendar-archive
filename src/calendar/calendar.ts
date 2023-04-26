@@ -17,6 +17,10 @@ export interface DateCell {
   isPrevMonth: boolean;
   isCurrentMonth: boolean;
   isNextMonth: boolean;
+  ctx: {
+    year: number;
+    month: number;
+  };
 }
 
 export const calendar = Calendar.create({
@@ -33,6 +37,7 @@ export const calendar = Calendar.create({
       isPrevMonth: false,
       isCurrentMonth: false,
       isNextMonth: false,
+      ctx,
     };
 
     if (ctx.year === year) {

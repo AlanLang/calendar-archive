@@ -14,6 +14,11 @@ describe("Generate calendar data", () => {
       isToday: false,
       month: 3,
       year: 2023,
+      ctx: {
+        year: 2023,
+        month: 4,
+        cell: expect.any(Function),
+      },
     });
   });
 });
