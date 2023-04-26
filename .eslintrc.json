@@ -1,0 +1,87 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "unused-imports"
+  ],
+  "rules": {
+    "no-debugger": 1,
+    "prefer-const": 1,
+    "one-var": [
+      2,
+      "never"
+    ],
+    "no-param-reassign": [
+      0,
+      {
+        "props": true
+      }
+    ],
+    "no-else-return": [
+      2,
+      {
+        "allowElseIf": false
+      }
+    ],
+    "no-unneeded-ternary": [
+      2,
+      {
+        "defaultAssignment": false
+      }
+    ],
+    "prefer-template": [
+      2
+    ],
+    "prefer-arrow-callback": [
+      1
+    ],
+    "prefer-destructuring": [
+      1,
+      {
+        "object": true,
+        "array": false
+      }
+    ],
+    "object-shorthand": [
+      2,
+      "always",
+      {
+        "avoidQuotes": true
+      }
+    ],
+    "template-curly-spacing": [
+      2
+    ],
+    "space-before-function-paren": 0,
+    "dot-notation": [
+      1,
+      {
+        "allowKeywords": true
+      }
+    ],
+    "@typescript-eslint/array-type": [
+      2
+    ],
+    "@typescript-eslint/explicit-module-boundary-types": [
+      0
+    ],
+    "@typescript-eslint/explicit-member-accessibility": [
+      2
+    ],
+    "unused-imports/no-unused-imports": [
+      2
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": false,
+        "semi": true
+      }
+    ]
+  }
+}
