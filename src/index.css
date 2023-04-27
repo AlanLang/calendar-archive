@@ -6,3 +6,48 @@
 body {
   user-select:none;
 }
+.rc-trigger-popup {
+  display: inline;
+}
+
+@media screen and (width < 550px) {
+  .calender-content {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0rem;
+  }
+}
+
+@media screen and (550px <= width) {
+  .calender-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media screen and (1025px <= width) {
+  .calender-content {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media screen and (1060px <= width) {
+  .calender-content {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media screen and (1570px <= width) {
+  .calender-content {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media screen and (1880px <= width) {
+  .calender-content {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}

@@ -1,6 +1,6 @@
 import * as Calendar from "@zhengxs/calendar-data";
 
-const now = new Date();
+export const now = new Date();
 function isToday(year: number, month: number, date: number) {
   return (
     now.getFullYear() === year &&
@@ -19,6 +19,7 @@ export interface DateCell {
   isCurrentMonth: boolean;
   isNextMonth: boolean;
   weekIndex: number;
+  holiday?: Holiday;
   ctx: {
     year: number;
     month: number;
@@ -49,6 +50,25 @@ export function getWeekNumber(date: Date) {
     1;
 
   return week;
+}
+
+interface Holiday {
+  name: string;
+  date: string;
+  isOffDay: true;
+}
+
+export function getHolidayByYear(year: number): Holiday[] | undefined {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const holidays = require(`/holiday-cn/${year}.json`);
+    if (holidays?.days?.length > 0) {
+      return holidays.days;
+    }
+    return undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export const calendar = Calendar.create({
@@ -90,5 +110,18 @@ export const calendar = Calendar.create({
 });
 
 export function getMonthCalder(year: number, month: number) {
-  return calendar.getMonthCalendar(year, month);
+  const holidays = getHolidayByYear(year);
+  const result = calendar.getMonthCalendar(year, month);
+  result.forEach((week) => {
+    week.forEach((day) => {
+      day.holiday = holidays?.find(
+        (item) =>
+          item.date ===
+          `${day.year}-${day.month.toString().padStart(2, "0")}-${day.date
+            .toString()
+            .padStart(2, "0")}`
+      );
+    });
+  });
+  return result;
 }

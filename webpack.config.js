@@ -2,6 +2,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === "production"; // 或者 env.production
@@ -64,6 +65,13 @@ module.exports = (env, argv) => {
       new MiniCssExtractPlugin({
         filename: "static/css/[name].[contenthash:8].css",
         chunkFilename: "static/css/[name].[contenthash:8].chunk.css",
+      }),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: "holiday-cn/**/20[0-9][0-9].json",
+          },
+        ],
       }),
     ],
     stats: "errors-warnings",

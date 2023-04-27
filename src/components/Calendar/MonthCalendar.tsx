@@ -1,6 +1,7 @@
 import { DateCell } from "../../calendar/calendar";
-
-const WEEK_NAMES = ["一", "二", "三", "四", "五", "六", "日"];
+import Trigger from "rc-trigger";
+import { CalenderDayPop } from "./CalenderDayPop";
+import { WEEK_NAMES } from "./constant";
 
 function MonthName({ month, year }: { month: number; year: number }) {
   return (
@@ -30,16 +31,36 @@ export function DayCell({ value }: { value: DateCell }) {
     classNames.push(
       "border-3 border-solid border-primary-700 rounded-full hover:border-secondary-700"
     );
+  } else if (value.holiday && value.holiday.isOffDay) {
+    classNames.push(
+      "bg-primary-700 text-white hover:border hover:border-white-500"
+    );
+  } else if (value.holiday && !value.holiday.isOffDay) {
+    classNames.push(
+      "bg-secondary-600 text-white hover:border hover:border-white-500"
+    );
   } else {
     classNames.push("hover:border hover:border-secondary-500");
   }
+
   if (value.week === 0 || value.week === 6) {
     classNames.push("text-primary-700 font-bold");
   }
 
   return (
     <div className="w-full h-full p-0.5 flex justify-center items-center">
-      <div className={classNames.join(" ")}>{value.date}</div>
+      <Trigger
+        action={["click"]}
+        destroyPopupOnHide={true}
+        mouseEnterDelay={0.5}
+        popup={<CalenderDayPop value={value}></CalenderDayPop>}
+        popupAlign={{
+          points: ["tl", "bl"],
+          offset: [0, 3],
+        }}
+      >
+        <div className={classNames.join(" ")}>{value.date}</div>
+      </Trigger>
     </div>
   );
 }

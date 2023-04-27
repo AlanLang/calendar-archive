@@ -1,12 +1,41 @@
+import { useCallback, useEffect, useState } from "react";
 import { getMonthCalder } from "./calendar";
 import { MonthCalendar } from "./components/Calendar";
-
-const result = getMonthCalder(2023, 4);
+import { DateCell, now } from "./calendar/calendar";
 
 export function App() {
+  const [year] = useState<number>(now.getFullYear());
+  const [monthData, setMonthData] = useState<DateCell[][][]>([]);
+
+  const getMonthCalderData = useCallback(() => {
+    const data: DateCell[][][] = [];
+    [...Array(12).keys()].forEach((item) => {
+      data.push(getMonthCalder(year, item + 1));
+    });
+    return data;
+  }, [year]);
+
+  useEffect(() => {
+    setMonthData(getMonthCalderData());
+  }, [getMonthCalderData]);
+
   return (
-    <div style={{ width: 250, height: 313 }}>
-      <MonthCalendar data={result} />
+    <div className="w-10/12">
+      <div>
+        <div className="h-16 w-64 bg-primary-700 text-secondary-100 font-black flex items-center justify-center">
+          CALENDAR
+        </div>
+      </div>
+      <h1 className="font-black text-4xl my-10">{year}年日历及节假日</h1>
+      <div className="grid calender-content">
+        {monthData.map((item) => {
+          return (
+            <div>
+              <MonthCalendar data={item} />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

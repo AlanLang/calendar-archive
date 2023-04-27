@@ -16,6 +16,7 @@ describe("Generate calendar data", () => {
       year: 2023,
       week: 1,
       weekIndex: 13,
+      holiday: undefined,
       ctx: {
         year: 2023,
         month: 4,
