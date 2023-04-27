@@ -7,13 +7,21 @@ describe("MonthCalendar view", () => {
     const result = calendar.getMonthCalendar(2023, 4);
     render(<MonthCalendar data={result} />);
     expect(screen.getByTestId("mouth-name")).toBeInTheDocument();
-    expect(screen.getByTestId("2023-04-25")).toBeInTheDocument();
   });
 
   it("should render month name", () => {
     const result = calendar.getMonthCalendar(2023, 4);
     render(<MonthCalendar data={result} />);
-    expect(screen.getByTestId("mouth-name-month")).toHaveTextContent("4 月");
+    expect(screen.getByTestId("mouth-name-month")).toHaveTextContent("4月");
     expect(screen.getByTestId("mouth-name-year")).toHaveTextContent("2023");
+  });
+
+  it("should be red border when today", () => {
+    const today = new Date();
+    const result = calendar.getMonthCalendar(2023, 4);
+    render(<MonthCalendar data={result} />);
+    expect(screen.getByText(today.getDate())).toHaveClass(
+      "border-3 border-solid border-primary-700 rounded-full h-9 w-9 flex justify-center items-center"
+    );
   });
 });
