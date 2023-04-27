@@ -1,1 +1,1 @@
-export { calendar } from "./calendar";
+export { getMonthCalder } from "./calendar";

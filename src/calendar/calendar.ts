@@ -88,3 +88,7 @@ export const calendar = Calendar.create({
     return cell;
   },
 });
+
+export function getMonthCalder(year: number, month: number) {
+  return calendar.getMonthCalendar(year, month);
+}

@@ -66,5 +66,6 @@ module.exports = (env, argv) => {
         chunkFilename: "static/css/[name].[contenthash:8].chunk.css",
       }),
     ],
+    stats: "errors-warnings",
   };
 };

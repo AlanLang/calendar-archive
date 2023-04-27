@@ -6,11 +6,6 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   content: ["./src/**/*.{html,tsx}"],
   theme: {
-    colors: {
-      ...colors,
-      primary: colors.red,
-      secondary: colors.gray,
-    },
     borderWidth: {
       DEFAULT: "1px",
       0: "0",
@@ -23,6 +18,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Montserrat", ...defaultTheme.fontFamily.sans],
+      },
+      colors: {
+        primary: colors.red,
+        secondary: colors.gray,
       },
     },
   },

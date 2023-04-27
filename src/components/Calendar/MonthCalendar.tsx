@@ -6,7 +6,7 @@ function MonthName({ month, year }: { month: number; year: number }) {
   return (
     <div
       data-testid="mouth-name"
-      className="text-lg border-b border-b-secondary-500 "
+      className="text-lg border-b border-b-secondary-500"
     >
       <label data-testid="mouth-name-month" className="font-black">
         {month}月
@@ -23,17 +23,25 @@ export function DayCell({ value }: { value: DateCell }) {
     return null;
   }
 
-  const classNames: string[] = [""];
+  const classNames: string[] = [
+    "flex justify-center items-center h-full w-full cursor-pointer",
+  ];
   if (value.isToday) {
     classNames.push(
-      "border-3 border-solid border-primary-700 rounded-full h-9 w-9 flex justify-center items-center"
+      "border-3 border-solid border-primary-700 rounded-full hover:border-secondary-700"
     );
+  } else {
+    classNames.push("hover:border hover:border-secondary-500");
   }
   if (value.week === 0 || value.week === 6) {
     classNames.push("text-primary-700 font-bold");
   }
 
-  return <div className={classNames.join(" ")}>{value.date}</div>;
+  return (
+    <div className="w-full h-full p-0.5 flex justify-center items-center">
+      <div className={classNames.join(" ")}>{value.date}</div>
+    </div>
+  );
 }
 
 export function WeekIndex({ value }: { value: DateCell }) {
