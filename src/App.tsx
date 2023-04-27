@@ -26,7 +26,12 @@ export function App() {
           CALENDAR
         </div>
       </div>
-      <h1 className="font-black text-4xl my-10">{year}年日历及节假日</h1>
+      <h1 className="font-black text-4xl my-10 text-secondary-600">
+        <label className="border-b border-b-secondary-700 border-dashed cursor-pointer">
+          {year}
+        </label>{" "}
+        年日历及节假日
+      </h1>
       <div className="grid calender-content">
         {monthData.map((item) => {
           return (

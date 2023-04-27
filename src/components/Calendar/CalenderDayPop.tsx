@@ -6,7 +6,7 @@ export function CalenderDayPop({ value }: { value: DateCell }) {
   return (
     <div className="bg-secondary-800 text-white inline-flex flex-col text-xl py-5 px-10 opacity-95">
       <div>
-        {`${value.year}年${value.month}月${value.date}日 星期${WEEK_NAMES[weekIndex]}`}
+        {`${value.year}年${value.month}月${value.date}日 星期${WEEK_NAMES[weekIndex]} 第 ${value.weekIndex} 周`}
       </div>
     </div>
   );
