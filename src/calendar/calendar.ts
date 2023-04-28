@@ -1,4 +1,5 @@
 import * as Calendar from "@zhengxs/calendar-data";
+import { getHolidayByYear } from "./holiday";
 
 export const now = new Date();
 function isToday(year: number, month: number, date: number) {
@@ -19,7 +20,10 @@ export interface DateCell {
   isCurrentMonth: boolean;
   isNextMonth: boolean;
   weekIndex: number;
+  dateStr: string;
   holiday?: Holiday;
+  position: [number, number];
+  d: Date;
   ctx: {
     year: number;
     month: number;
@@ -52,23 +56,10 @@ export function getWeekNumber(date: Date) {
   return week;
 }
 
-interface Holiday {
+export interface Holiday {
   name: string;
   date: string;
   isOffDay: true;
-}
-
-export function getHolidayByYear(year: number): Holiday[] | undefined {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const holidays = require(`/holiday-cn/${year}.json`);
-    if (holidays?.days?.length > 0) {
-      return holidays.days;
-    }
-    return undefined;
-  } catch {
-    return undefined;
-  }
 }
 
 export const calendar = Calendar.create({
@@ -88,7 +79,12 @@ export const calendar = Calendar.create({
       isCurrentMonth: false,
       isNextMonth: false,
       weekIndex: getWeekNumber(d),
+      position: [0, 0],
+      dateStr: `${year}-${month.toString().padStart(2, "0")}-${date
+        .toString()
+        .padStart(2, "0")}`,
       ctx,
+      d,
     };
 
     if (ctx.year === year) {
@@ -112,15 +108,10 @@ export const calendar = Calendar.create({
 export function getMonthCalder(year: number, month: number) {
   const holidays = getHolidayByYear(year);
   const result = calendar.getMonthCalendar(year, month);
-  result.forEach((week) => {
-    week.forEach((day) => {
-      day.holiday = holidays?.find(
-        (item) =>
-          item.date ===
-          `${day.year}-${day.month.toString().padStart(2, "0")}-${day.date
-            .toString()
-            .padStart(2, "0")}`
-      );
+  result.forEach((week, weekIndex) => {
+    week.forEach((day, dayIndex) => {
+      day.holiday = holidays.find((item) => item.date === day.dateStr);
+      day.position = [weekIndex, dayIndex];
     });
   });
   return result;

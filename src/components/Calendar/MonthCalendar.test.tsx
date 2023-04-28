@@ -21,7 +21,7 @@ describe("MonthCalendar view", () => {
     const result = getMonthCalder(2023, 4);
     render(<MonthCalendar data={result} />);
     expect(screen.getByText(today.getDate())).toHaveClass(
-      "border-3 border-solid border-primary-700 rounded-full h-9 w-9 flex justify-center items-center"
+      "flex justify-center items-center h-full w-full cursor-pointer border-3 border-solid border-primary-700 rounded-full hover:border-secondary-700"
     );
   });
 });

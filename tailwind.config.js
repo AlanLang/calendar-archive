@@ -6,6 +6,9 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   content: ["./src/**/*.{html,tsx}"],
   theme: {
+    screens: {
+      tablet: "550px",
+    },
     borderWidth: {
       DEFAULT: "1px",
       0: "0",

@@ -1,6 +1,4 @@
 import { DateCell } from "../../calendar/calendar";
-import Trigger from "rc-trigger";
-import { CalenderDayPop } from "./CalenderDayPop";
 import { WEEK_NAMES } from "./constant";
 
 function MonthName({ month, year }: { month: number; year: number }) {
@@ -48,21 +46,14 @@ export function DayCell({ value }: { value: DateCell }) {
   }
 
   return (
-    <Trigger
-      action={["click"]}
-      destroyPopupOnHide={true}
-      mouseEnterDelay={0.5}
-      popup={<CalenderDayPop value={value}></CalenderDayPop>}
-      popupAlign={{
-        points: ["tl", "tr"], // align top left point of sourceNode with top right point of targetNode
-        offset: [10, 50], // the offset sourceNode by 10px in x and 20px in y,
-        overflow: { adjustX: true, adjustY: true }, // auto adjust position when sourceNode is overflowed
-      }}
-    >
-      <div className="w-full h-full p-0.5 flex justify-center items-center">
-        <div className={classNames.join(" ")}>{value.date}</div>
+    <div className="w-full h-full p-0.5 flex justify-center items-center">
+      <div
+        data-calender-day={`${value.month - 1}-${value.position.join("-")}`}
+        className={classNames.join(" ")}
+      >
+        {value.date}
       </div>
-    </Trigger>
+    </div>
   );
 }
 
