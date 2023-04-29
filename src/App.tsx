@@ -1,16 +1,24 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getMonthCalder } from "./calendar";
 import { MonthCalendar } from "./components/Calendar";
 import { DateCell, now } from "./calendar/calendar";
-import { CalenderDayPop } from "./components/Calendar/CalenderDayPop";
+import {
+  CalenderDayPop,
+  POP_WIDTH,
+} from "./components/Calendar/CalenderDayPop";
+import { useHover } from "./hooks/useHoverEffect";
+
+const OPO_OFFSET = 20;
+
+function isHoverCalenderDay(e: MouseEvent) {
+  const { dataset } = e.target as HTMLElement;
+  return dataset && "calenderDay" in dataset;
+}
 
 export function App() {
   const [year] = useState<number>(now.getFullYear());
   const [monthData, setMonthData] = useState<DateCell[][][]>([]);
-  const [hoverPosition, setHoverPosition] = useState<
-    [number, number, number, number, number] | null
-  >(null);
-  const hoverTimeoutId = useRef<number | null>(null);
+  const { ref, hoverEventState } = useHover({ isHover: isHoverCalenderDay });
 
   const getMonthCalderData = useCallback(() => {
     const data: DateCell[][][] = [];
@@ -24,26 +32,26 @@ export function App() {
     setMonthData(getMonthCalderData());
   }, [getMonthCalderData]);
 
-  const handleMouseClick = useCallback((e: MouseEvent) => {
-    const isHoverCalenderDay = "calenderDay" in (e.target as any).dataset;
+  const hoverPosition = useMemo(() => {
+    if (!hoverEventState) return null;
+    const { dataset } = hoverEventState.target as HTMLElement;
+    const isHoverCalenderDay = dataset && "calenderDay" in dataset;
     if (isHoverCalenderDay) {
-      hoverTimeoutId.current && clearTimeout(hoverTimeoutId.current);
-      const data = (e.target as any).dataset.calenderDay.split("-");
-      setHoverPosition([...data, e.clientX + 30, e.clientY + 30] as any);
-    } else {
-      hoverTimeoutId.current && clearTimeout(hoverTimeoutId.current);
-      hoverTimeoutId.current = window.setTimeout(() => {
-        setHoverPosition(null);
-      }, 500);
+      const data = dataset.calenderDay!.split("-");
+      // 如果超出屏幕右侧，则显示在鼠标左侧
+      let positionX = hoverEventState.clientX + OPO_OFFSET;
+      if (positionX + POP_WIDTH > window.innerWidth) {
+        positionX = hoverEventState.clientX - OPO_OFFSET - POP_WIDTH;
+      }
+      return [
+        ...data,
+        positionX,
+        hoverEventState.clientY + OPO_OFFSET,
+      ] as unknown as [number, number, number, number, number];
     }
-  }, []);
 
-  useEffect(() => {
-    document.addEventListener("click", handleMouseClick);
-    return () => {
-      document.removeEventListener("click", handleMouseClick);
-    };
-  });
+    return null;
+  }, [hoverEventState]);
 
   const hoverPositionValue = useMemo(() => {
     if (!hoverPosition) return null;
@@ -63,12 +71,7 @@ export function App() {
         </label>
         年日历<label className="hidden tablet:inline">及节假日</label>
       </h1>
-      <div
-        className="grid calender-content"
-        onMouseLeave={() => {
-          setHoverPosition(null);
-        }}
-      >
+      <div ref={ref} className="grid calender-content">
         {monthData.map((item, i) => {
           return (
             <div key={i}>
@@ -77,18 +80,17 @@ export function App() {
           );
         })}
       </div>
-      {hoverPositionValue && (
+      {hoverPositionValue && hoverPosition && (
         <div
           className="fixed top-0 left-0 animate-fade-in"
           style={{
-            transform: `translate(${hoverPosition![3]}px, ${
-              hoverPosition![4]
-            }px)`,
+            transform: `translate(${hoverPosition[3]}px, ${hoverPosition[4]}px)`,
           }}
         >
           <CalenderDayPop value={hoverPositionValue} />
         </div>
       )}
+      {monthData.length > 0 && <CalenderDayPop value={monthData[0][0][0]} />}
     </div>
   );
 }

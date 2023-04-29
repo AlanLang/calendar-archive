@@ -2,6 +2,7 @@ import { DateCell } from "../../calendar/calendar";
 import { diffToday } from "../../calendar/day";
 import { diffHolidayByToday } from "../../calendar/holiday";
 import { WEEK_NAMES } from "./constant";
+export const POP_WIDTH = 400;
 
 function Today({ value }: { value: DateCell }) {
   let label = "今天";
@@ -22,7 +23,10 @@ function Today({ value }: { value: DateCell }) {
 export function CalenderDayPop({ value }: { value: DateCell }) {
   const weekIndex = value.week === 0 ? 6 : value.week - 1;
   return (
-    <div className="bg-secondary-800 text-white inline-flex flex-col text-xl py-5 px-10 opacity-95">
+    <div
+      className="bg-secondary-800 text-white inline-flex flex-col text-xl py-5 px-10 opacity-95"
+      style={{ width: POP_WIDTH }}
+    >
       <div data-testid="calender-day-pop-title">
         {`${value.year}年${value.month}月${value.date}日 星期${WEEK_NAMES[weekIndex]} 第 ${value.weekIndex} 周`}
       </div>
