@@ -60,6 +60,8 @@ export interface Holiday {
   name: string;
   date: string;
   isOffDay: true;
+  index: number;
+  total: number;
 }
 
 export const calendar = Calendar.create({
@@ -110,7 +112,21 @@ export function getMonthCalder(year: number, month: number) {
   const result = calendar.getMonthCalendar(year, month);
   result.forEach((week, weekIndex) => {
     week.forEach((day, dayIndex) => {
-      day.holiday = holidays.find((item) => item.date === day.dateStr);
+      const holiday = holidays.find((item) => item.date === day.dateStr);
+      if (holiday) {
+        const sameTodayHolidays = holidays.filter(
+          (item) =>
+            item.name === holiday.name && item.isOffDay === holiday.isOffDay
+        );
+        const index = sameTodayHolidays.findIndex(
+          (item) => item.date === holiday.date
+        );
+        day.holiday = {
+          ...holiday,
+          index,
+          total: sameTodayHolidays.length,
+        };
+      }
       day.position = [weekIndex, dayIndex];
     });
   });

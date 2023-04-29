@@ -16,7 +16,6 @@ describe("Generate calendar data", () => {
       year: 2023,
       week: 1,
       weekIndex: 13,
-      holiday: undefined,
       d: new Date(2023, 2, 27),
       dateStr: "2023-03-27",
       position: [0, 0],
@@ -33,6 +32,8 @@ describe("Generate calendar data", () => {
     expect(result[0][0].holiday).toStrictEqual({
       date: "2023-05-01",
       name: "劳动节",
+      index: 2,
+      total: 5,
       isOffDay: true,
     });
   });

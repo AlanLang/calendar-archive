@@ -14,11 +14,34 @@ function Today({ value }: { value: DateCell }) {
     label += holiday ? `, 共 ${holiday} 天假期` : "";
   }
 
-  return (
-    <div className="text-base" data-testid="calender-day-pop-today">
-      {label}
-    </div>
-  );
+  return <div data-testid="calender-day-pop-today">{label}</div>;
+}
+
+function Holiday({ value }: { value: DateCell }) {
+  if (!value.holiday) {
+    return null;
+  }
+
+  if (value.holiday.isOffDay) {
+    return (
+      <div>
+        {value.holiday.name} 假期 {value.holiday.index + 1}
+        <span className="mx-0.5">/</span>
+        {value.holiday.total}
+      </div>
+    );
+  }
+
+  if (!value.holiday.isOffDay) {
+    return (
+      <div>
+        {value.holiday.name} 补班 {value.holiday.index + 1}
+        <span className="mx-0.5">/</span>
+        {value.holiday.total}
+      </div>
+    );
+  }
+  return null;
 }
 
 export const CalenderDayDetail = memo(({ value }: { value: DateCell }) => {
@@ -31,7 +54,10 @@ export const CalenderDayDetail = memo(({ value }: { value: DateCell }) => {
       <div data-testid="calender-day-pop-title">
         {`${value.year}年${value.month}月${value.date}日 星期${WEEK_NAMES[weekIndex]} 第 ${value.weekIndex} 周`}
       </div>
-      <Today value={value} />
+      <div className="text-base">
+        <Today value={value} />
+        <Holiday value={value} />
+      </div>
     </div>
   );
 });
