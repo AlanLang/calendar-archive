@@ -1,12 +1,10 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { getMonthCalder } from "./calendar";
 import { DateCell, now } from "./calendar/calendar";
-import {
-  CalenderDayDetail,
-  POP_WIDTH,
-} from "./components/Calendar/CalenderDayDetail";
+import { CalenderDayDetail } from "./components/Calendar/CalenderDayDetail";
 import { useHover } from "./hooks/useHoverEffect";
 import { MonthCalendar } from "./components/Calendar";
+import { isMobileDevice } from "./utils/isMobileDevice";
 
 const OPO_OFFSET = 20;
 
@@ -109,6 +107,8 @@ const CalendarYear = memo(({ value }: { value: DateCell[][][] }) => {
   );
 });
 
+const POP_WIDTH = 400;
+
 function CalenderDayPopup({
   value,
   position,
@@ -121,11 +121,35 @@ function CalenderDayPopup({
   if (!value) {
     return null;
   }
+  if (isMobileDevice()) {
+    return (
+      <div className="fixed left-0 bottom-0 right-0 ">
+        <CalenderDayDetail value={value} />
+        <div className="absolute right-2 top-2 text-white bg-secondary-700">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       className={`fixed top-0 left-0 ${className}`}
       style={{
         transform: `translate(${position[0]}px, ${position[1]}px)`,
+        width: POP_WIDTH,
       }}
     >
       <CalenderDayDetail value={value} />
