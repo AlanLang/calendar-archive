@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { DateCell } from "../../calendar/calendar";
 import { diffToday } from "../../calendar/day";
 import { diffHolidayByToday } from "../../calendar/holiday";
@@ -20,7 +21,7 @@ function Today({ value }: { value: DateCell }) {
   );
 }
 
-export function CalenderDayPop({ value }: { value: DateCell }) {
+export const CalenderDayDetail = memo(({ value }: { value: DateCell }) => {
   const weekIndex = value.week === 0 ? 6 : value.week - 1;
   return (
     <div
@@ -33,4 +34,4 @@ export function CalenderDayPop({ value }: { value: DateCell }) {
       <Today value={value} />
     </div>
   );
-}
+});

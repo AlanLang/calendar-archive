@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { getMonthCalder } from "./calendar";
-import { MonthCalendar } from "./components/Calendar";
 import { DateCell, now } from "./calendar/calendar";
 import {
-  CalenderDayPop,
+  CalenderDayDetail,
   POP_WIDTH,
-} from "./components/Calendar/CalenderDayPop";
+} from "./components/Calendar/CalenderDayDetail";
 import { useHover } from "./hooks/useHoverEffect";
+import { MonthCalendar } from "./components/Calendar";
 
 const OPO_OFFSET = 20;
 
@@ -18,7 +18,9 @@ function isHoverCalenderDay(e: MouseEvent) {
 export function App() {
   const [year] = useState<number>(now.getFullYear());
   const [monthData, setMonthData] = useState<DateCell[][][]>([]);
-  const { ref, hoverEventState } = useHover({ isHover: isHoverCalenderDay });
+  const { ref, hoverEventState, transitionString } = useHover({
+    isHover: isHoverCalenderDay,
+  });
 
   const getMonthCalderData = useCallback(() => {
     const data: DateCell[][][] = [];
@@ -60,37 +62,73 @@ export function App() {
 
   return (
     <div className="w-10/12">
-      <div>
-        <div className="h-16 w-64 bg-primary-700 text-secondary-100 font-black flex items-center justify-center">
-          CALENDAR
-        </div>
-      </div>
-      <h1 className="font-black text-4xl my-10 text-secondary-600">
-        <label className="border-b border-b-secondary-700 border-dashed cursor-pointer mx-1">
-          {year}
-        </label>
-        年日历<label className="hidden tablet:inline">及节假日</label>
-      </h1>
+      <Logo />
+      <CalendarHeader year={year} />
       <div ref={ref} className="grid calender-content">
-        {monthData.map((item, i) => {
-          return (
-            <div key={i}>
-              <MonthCalendar data={item} />
-            </div>
-          );
-        })}
+        <CalendarYear value={monthData} />
       </div>
-      {hoverPositionValue && hoverPosition && (
-        <div
-          className="fixed top-0 left-0 animate-fade-in"
-          style={{
-            transform: `translate(${hoverPosition[3]}px, ${hoverPosition[4]}px)`,
-          }}
-        >
-          <CalenderDayPop value={hoverPositionValue} />
-        </div>
-      )}
-      {monthData.length > 0 && <CalenderDayPop value={monthData[0][0][0]} />}
+      <CalenderDayPopup
+        value={hoverPositionValue}
+        position={hoverPosition ? [hoverPosition[3], hoverPosition[4]] : [0, 0]}
+        className={`detail-pop-${transitionString}`}
+      />
+    </div>
+  );
+}
+
+const Logo = memo(() => {
+  return (
+    <div className="h-16 w-64 bg-primary-700 text-secondary-100 font-black flex items-center justify-center">
+      CALENDAR
+    </div>
+  );
+});
+
+const CalendarHeader = memo(({ year }: { year: number }) => {
+  return (
+    <h1 className="font-black text-4xl my-10 text-secondary-600">
+      <label className="border-b border-b-secondary-700 border-dashed cursor-pointer mx-1">
+        {year}
+      </label>
+      年日历<label className="hidden tablet:inline">及节假日</label>
+    </h1>
+  );
+});
+
+const CalendarYear = memo(({ value }: { value: DateCell[][][] }) => {
+  return (
+    <>
+      {value.map((item, i) => {
+        return (
+          <div key={i}>
+            <MonthCalendar data={item} />
+          </div>
+        );
+      })}
+    </>
+  );
+});
+
+function CalenderDayPopup({
+  value,
+  position,
+  className,
+}: {
+  value: DateCell | null;
+  position: [number, number];
+  className: string;
+}) {
+  if (!value) {
+    return null;
+  }
+  return (
+    <div
+      className={`fixed top-0 left-0 ${className}`}
+      style={{
+        transform: `translate(${position[0]}px, ${position[1]}px)`,
+      }}
+    >
+      <CalenderDayDetail value={value} />
     </div>
   );
 }

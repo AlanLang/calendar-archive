@@ -6,9 +6,6 @@
 body {
   user-select:none;
 }
-.rc-trigger-popup {
-  display: inline;
-}
 
 @media screen and (width < 550px) {
   .calender-content {
@@ -53,20 +50,13 @@ body {
 }
 
 
-.example-enter {
-  opacity: 0.01;
-}
 
-.example-enter.example-enter-active {
+.detail-pop-enter {
   opacity: 1;
-  transition: opacity 5000ms ease-in;
+  transition: opacity 500ms ease-in;
 }
 
-.example-leave {
-  opacity: 1;
-}
-
-.example-leave.example-leave-active {
+.detail-pop-leave {
   opacity: 0.01;
-  transition: opacity 5000ms ease-in;
+  transition: opacity 500ms ease-in;
 }

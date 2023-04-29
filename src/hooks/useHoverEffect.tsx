@@ -2,10 +2,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useHover({
   isHover = () => true,
+  mouseEnterDelay = 500,
+  mouseLeaveDelay = 100,
 }: {
   isHover?: (e: MouseEvent) => boolean;
+  mouseEnterDelay?: number;
+  mouseLeaveDelay?: number;
 }) {
   const target = useRef<HTMLDivElement | null>(null);
+  const [transitionString, setTransitionString] = useState<string>("");
   const mouseOutTimeoutId = useRef<number | null>(null);
   const mouseInTimeoutId = useRef<number | null>(null);
   const isHoverOn = useRef<boolean>(false);
@@ -17,6 +22,7 @@ export function useHover({
     (e: MouseEvent) => {
       mouseOutTimeoutId.current && clearTimeout(mouseOutTimeoutId.current);
       if (isHover(e)) {
+        setTransitionString("enter");
         if (isHoverOn.current) {
           setHoverEventState(e);
           return;
@@ -24,16 +30,17 @@ export function useHover({
         mouseInTimeoutId.current = window.setTimeout(() => {
           setHoverEventState(e);
           isHoverOn.current = true;
-        }, 500);
+        }, mouseEnterDelay);
       } else {
+        setTransitionString("leave");
         mouseInTimeoutId.current && clearTimeout(mouseInTimeoutId.current);
         mouseOutTimeoutId.current = window.setTimeout(() => {
           setHoverEventState(null);
           isHoverOn.current = false;
-        }, 100);
+        }, mouseLeaveDelay);
       }
     },
-    [isHover]
+    [isHover, mouseEnterDelay, mouseLeaveDelay]
   );
 
   const handleClearHoverEvent = useCallback(() => {
@@ -54,5 +61,5 @@ export function useHover({
     };
   }, [handleTargetHover, handleClearHoverEvent]);
 
-  return { ref: target, hoverEventState };
+  return { ref: target, hoverEventState, transitionString };
 }
