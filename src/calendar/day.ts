@@ -5,5 +5,9 @@ export function diffDay(start: Date, end: Date) {
 }
 
 export function diffToday(date: Date) {
-  return diffDay(new Date(), date);
+  const today = new Date();
+  return diffDay(
+    new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+    date
+  );
 }
