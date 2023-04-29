@@ -16,8 +16,11 @@ describe("CalenderDayPop view", () => {
 
   it("should show diff message after today", () => {
     jest.useFakeTimers().setSystemTime(new Date(2023, 3, 28));
+    const today = new Date();
+    expect(today.getDate()).toBe(28);
     const result = getMonthCalder(2023, 5);
     const date = result[1][0];
+    expect(date.dateStr).toBe("2023-05-08");
     render(<CalenderDayPop value={date} />);
     expect(screen.getByTestId("calender-day-pop-today")).toBeInTheDocument();
     expect(screen.getByTestId("calender-day-pop-today")).toHaveTextContent(
