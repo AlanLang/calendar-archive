@@ -1,0 +1,30 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Build
+        uses: actions/setup-node@master
+        with:
+          node-version: '16.x'
+          cache: 'yarn'
+      - run: yarn # 安装依赖
+      - run: yarn test # 测试
+      - run: yarn build # 打包
+
+      # Deploy, GitHub Pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist

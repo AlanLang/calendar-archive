@@ -19,6 +19,7 @@ describe("Generate calendar data", () => {
       holiday: undefined,
       d: new Date(2023, 2, 27),
       dateStr: "2023-03-27",
+      position: [0, 0],
       ctx: {
         year: 2023,
         month: 4,
