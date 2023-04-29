@@ -1,11 +1,12 @@
-name: build
+name: test
 
 on:
-  push:
+  pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -13,18 +14,10 @@ jobs:
         with:
           submodules: 'true'
 
-      - name: Build
+      - name: Test
         uses: actions/setup-node@master
         with:
           node-version: '16.x'
           cache: 'yarn'
       - run: yarn # 安装依赖
       - run: yarn test # 测试
-      - run: yarn build # 打包
-
-      # Deploy, GitHub Pages
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
