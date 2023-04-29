@@ -1,20 +1,14 @@
 import { createRoot } from "react-dom/client";
-import React, { useEffect } from "react";
-import { calendar } from "./calendar/calendar";
-import { Calendar } from "./components/Calendar/calendar";
+import React from "react";
 import "./index.css";
-const result = calendar.getMonthCalendar(2023, 4);
-function App() {
-  useEffect(() => {
-    const result = calendar.getMonthCalendar(2023, 4);
-    console.log(result);
-  }, []);
-  return <Calendar data={result} />;
-}
+import { App } from "./App";
 
-const root = createRoot(document.getElementById("app")!);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const appDom = document.getElementById("app");
+if (appDom) {
+  const root = createRoot(appDom);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}

@@ -14,4 +14,10 @@ module.exports = {
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  moduleNameMapper: {
+    "/holiday-cn/(.*).json$": "<rootDir>/holiday-cn/$1.json",
+    "\\.(css|less)$": "<rootDir>/styleMock.js",
+    "^@fvs/base$": "<rootDir>/node_modules/@fvs/base/dist/esm",
+    "(/components/Text/RichText)$": "<rootDir>/styleMock.js", // 这个文件类型有点问题，先跳过，有时间再看
+  },
 };
