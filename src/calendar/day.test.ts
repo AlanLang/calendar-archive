@@ -38,4 +38,10 @@ describe("diffToday", () => {
     const date2 = new Date(2023, 3, 28);
     expect(diffToday(date2)).toEqual(56);
   });
+
+  it("should have 1 day when every time in today", () => {
+    jest.useFakeTimers().setSystemTime(new Date(2023, 3, 28, 23, 59, 59));
+    const end = new Date(2023, 3, 29);
+    expect(diffToday(end)).toEqual(1);
+  });
 });
