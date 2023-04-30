@@ -24,6 +24,7 @@ export function useHover({
       if (isHover(e)) {
         setTransitionString("enter");
         if (isHoverOn.current) {
+          mouseInTimeoutId.current && clearTimeout(mouseInTimeoutId.current);
           setHoverEventState(e);
           return;
         }
