@@ -39,3 +39,31 @@ describe("CalenderDayDetail view", () => {
     );
   });
 });
+
+describe("CalenderDayDetail view holiday", () => {
+  it("should show nothing without holiday", () => {
+    const result = getMonthCalder(2023, 4);
+    const date = result[0][1];
+    render(<CalenderDayDetail value={date} />);
+    expect(screen.queryByTestId("calender-day-pop-holiday")).toBeNull();
+  });
+  it("should show holiday detail in holiday", () => {
+    const result = getMonthCalder(2023, 5);
+    const date = result[0][0];
+    render(<CalenderDayDetail value={date} />);
+    expect(screen.getByTestId("calender-day-pop-holiday")).toBeInTheDocument();
+    expect(screen.getByTestId("calender-day-pop-holiday")).toHaveTextContent(
+      "劳动节 假期 3/5"
+    );
+  });
+
+  it("should show work day in holiday", () => {
+    const result = getMonthCalder(2023, 5);
+    const date = result[0][5];
+    render(<CalenderDayDetail value={date} />);
+    expect(screen.getByTestId("calender-day-pop-holiday")).toBeInTheDocument();
+    expect(screen.getByTestId("calender-day-pop-holiday")).toHaveTextContent(
+      "劳动节 补班 2/2"
+    );
+  });
+});

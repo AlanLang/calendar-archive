@@ -23,7 +23,7 @@ function Holiday({ value }: { value: DateCell }) {
 
   if (value.holiday.isOffDay) {
     return (
-      <div>
+      <div data-testid="calender-day-pop-holiday">
         {value.holiday.name} 假期 {value.holiday.index + 1}
         <span className="mx-0.5">/</span>
         {value.holiday.total}
@@ -33,7 +33,7 @@ function Holiday({ value }: { value: DateCell }) {
 
   if (!value.holiday.isOffDay) {
     return (
-      <div>
+      <div data-testid="calender-day-pop-holiday">
         {value.holiday.name} 补班 {value.holiday.index + 1}
         <span className="mx-0.5">/</span>
         {value.holiday.total}
