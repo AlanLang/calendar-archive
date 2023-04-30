@@ -5,8 +5,11 @@ import { CalenderDayDetail } from "./components/Calendar/CalenderDayDetail";
 import { useHover } from "./hooks/useHoverEffect";
 import { MonthCalendar } from "./components/Calendar";
 import { isMobileDevice } from "./utils/isMobileDevice";
+import { Mark } from "./components/Calendar/MonthCalendar";
 
 const OPO_OFFSET = 20;
+const COLORS = ["orange", "green", "cyan", "blue", "purple"];
+const CALENDAR_CONFIG = "CALENDAR_CONFIG";
 
 function isHoverCalenderDay(e: MouseEvent) {
   const { dataset } = e.target as HTMLElement;
@@ -14,8 +17,11 @@ function isHoverCalenderDay(e: MouseEvent) {
 }
 
 export function App() {
+  const config = localStorage.getItem(CALENDAR_CONFIG);
+  const defaultMarks = config ? JSON.parse(config).marks : [];
   const [year] = useState<number>(now.getFullYear());
   const [monthData, setMonthData] = useState<DateCell[][][]>([]);
+  const [marks, setMarks] = useState<Mark[]>(defaultMarks);
   const { ref, hoverEventState, transitionString } = useHover({
     isHover: isHoverCalenderDay,
   });
@@ -31,6 +37,11 @@ export function App() {
   useEffect(() => {
     setMonthData(getMonthCalderData());
   }, [getMonthCalderData]);
+
+  const saveMarks = (value: Mark[]) => {
+    setMarks(value);
+    localStorage.setItem(CALENDAR_CONFIG, JSON.stringify({ marks: value }));
+  };
 
   const hoverPosition = useMemo(() => {
     if (!hoverEventState) return null;
@@ -60,16 +71,35 @@ export function App() {
   }, [monthData, hoverPosition]);
 
   const dayPropClassName = `detail-day-${transitionString}`;
-
   return (
     <div className="w-10/12">
       <Logo />
       <CalendarHeader year={year} />
       <div ref={ref} className="calender-content grid">
-        <CalendarYear value={monthData} />
+        <CalendarYear
+          value={monthData}
+          marks={marks}
+          onMarksSelect={(value) => {
+            if (marks.some((item) => item.date.dateStr === value.dateStr)) {
+              saveMarks(
+                marks.filter((item) => item.date.dateStr !== value.dateStr)
+              );
+            } else {
+              saveMarks([
+                ...marks,
+                {
+                  date: value,
+                  name: value.dateStr,
+                  color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                },
+              ]);
+            }
+          }}
+        />
       </div>
       <CalenderDayPopup
         value={hoverPositionValue}
+        marks={marks}
         position={hoverPosition ? [hoverPosition[3], hoverPosition[4]] : [0, 0]}
         className={dayPropClassName}
       />
@@ -96,19 +126,33 @@ const CalendarHeader = memo(({ year }: { year: number }) => {
   );
 });
 
-const CalendarYear = memo(({ value }: { value: DateCell[][][] }) => {
-  return (
-    <>
-      {value.map((item, i) => {
-        return (
-          <div key={i}>
-            <MonthCalendar data={item} />
-          </div>
-        );
-      })}
-    </>
-  );
-});
+const CalendarYear = memo(
+  ({
+    value,
+    marks,
+    onMarksSelect,
+  }: {
+    value: DateCell[][][];
+    marks: Mark[];
+    onMarksSelect?: (date: DateCell) => void;
+  }) => {
+    return (
+      <>
+        {value.map((item, i) => {
+          return (
+            <div key={i}>
+              <MonthCalendar
+                data={item}
+                marks={marks}
+                onMarksSelect={onMarksSelect}
+              />
+            </div>
+          );
+        })}
+      </>
+    );
+  }
+);
 
 const POP_WIDTH = 400;
 
@@ -116,10 +160,12 @@ function CalenderDayPopup({
   value,
   position,
   className,
+  marks,
 }: {
   value: DateCell | null;
   position: [number, number];
   className: string;
+  marks: Mark[];
 }) {
   if (!value) {
     return null;
@@ -127,7 +173,7 @@ function CalenderDayPopup({
   if (isMobileDevice()) {
     return (
       <div className="fixed inset-x-0 bottom-0">
-        <CalenderDayDetail value={value} />
+        <CalenderDayDetail value={value} marks={marks} />
         <div className="absolute right-2 top-2 bg-secondary-700 text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +201,7 @@ function CalenderDayPopup({
         width: POP_WIDTH,
       }}
     >
-      <CalenderDayDetail value={value} />
+      <CalenderDayDetail value={value} marks={marks} />
     </div>
   );
 }
