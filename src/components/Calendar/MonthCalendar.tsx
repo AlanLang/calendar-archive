@@ -1,6 +1,12 @@
 import { DateCell } from "../../calendar/calendar";
 import { WEEK_NAMES } from "./constant";
 
+export interface Mark {
+  name: string;
+  color: string;
+  date: DateCell;
+}
+
 function MonthName({ month, year }: { month: number; year: number }) {
   return (
     <div
@@ -17,7 +23,15 @@ function MonthName({ month, year }: { month: number; year: number }) {
   );
 }
 
-export function DayCell({ value }: { value: DateCell }) {
+export function DayCell({
+  value,
+  marks,
+  onMarksSelect,
+}: {
+  value: DateCell;
+  marks?: Mark[];
+  onMarksSelect: () => void;
+}) {
   if (!value.isCurrentMonth) {
     return null;
   }
@@ -25,6 +39,8 @@ export function DayCell({ value }: { value: DateCell }) {
   const classNames: string[] = [
     "flex justify-center items-center h-full w-full cursor-pointer",
   ];
+  const mark = marks?.find((item) => item.date.dateStr === value.dateStr);
+
   if (value.isToday) {
     classNames.push(
       "border-3 border-solid border-primary-700 rounded-full hover:border-secondary-700"
@@ -46,10 +62,20 @@ export function DayCell({ value }: { value: DateCell }) {
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-center p-0.5">
+    <div
+      className="flex h-full w-full items-center justify-center p-0.5"
+      onDoubleClick={onMarksSelect}
+    >
       <div
         data-calender-day={`${value.month - 1}-${value.position.join("-")}`}
         className={classNames.join(" ")}
+        style={
+          mark
+            ? {
+                border: `3px solid ${mark.color}`,
+              }
+            : {}
+        }
       >
         {value.date}
       </div>
@@ -67,9 +93,13 @@ export function WeekIndex({ value }: { value: DateCell }) {
 export function MonthCalendar({
   data,
   className,
+  marks,
+  onMarksSelect,
 }: {
   data: DateCell[][];
   className?: string;
+  marks?: Mark[];
+  onMarksSelect?: (date: DateCell) => void;
 }) {
   const firstData = data[0][0];
   const dataWithWeek = data.map((row) => [
@@ -103,7 +133,13 @@ export function MonthCalendar({
                       j === 0 ? (
                         <WeekIndex value={cell} />
                       ) : (
-                        <DayCell value={cell} />
+                        <DayCell
+                          value={cell}
+                          marks={marks}
+                          onMarksSelect={() => {
+                            onMarksSelect?.(cell);
+                          }}
+                        />
                       )
                     ) : null}
                   </div>
