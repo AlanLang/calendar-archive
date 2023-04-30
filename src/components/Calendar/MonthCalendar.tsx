@@ -5,7 +5,7 @@ function MonthName({ month, year }: { month: number; year: number }) {
   return (
     <div
       data-testid="mouth-name"
-      className="text-lg border-b border-b-secondary-500"
+      className="border-b border-b-secondary-500 text-lg"
     >
       <label data-testid="mouth-name-month" className="font-black">
         {month}月
@@ -46,7 +46,7 @@ export function DayCell({ value }: { value: DateCell }) {
   }
 
   return (
-    <div className="w-full h-full p-0.5 flex justify-center items-center">
+    <div className="flex h-full w-full items-center justify-center p-0.5">
       <div
         data-calender-day={`${value.month - 1}-${value.position.join("-")}`}
         className={classNames.join(" ")}
@@ -79,7 +79,7 @@ export function MonthCalendar({
   return (
     <div className={className}>
       <MonthName month={firstData.ctx.month} year={firstData.ctx.year} />
-      <table className="text-xs w-full">
+      <table className="w-full text-xs">
         <thead>
           <tr>
             {["", ...WEEK_NAMES].map((name, i) => (
@@ -95,10 +95,10 @@ export function MonthCalendar({
               {row.map((cell, j) => (
                 <td
                   style={{ width: j === 0 ? "6.2%" : "13.4%" }}
-                  className="justify-center items-center text-secondary-500"
+                  className="items-center justify-center text-secondary-500"
                   key={j}
                 >
-                  <div className="w-full inline-flex justify-center items-center aspect-square">
+                  <div className="inline-flex aspect-square w-full items-center justify-center">
                     {cell ? (
                       j === 0 ? (
                         <WeekIndex value={cell} />

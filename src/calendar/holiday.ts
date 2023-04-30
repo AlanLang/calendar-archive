@@ -5,6 +5,7 @@ const holidayMemos = new Map<number, Holiday[]>();
 
 export function getHolidayByYear(year: number): Holiday[] {
   if (holidayMemos.has(year)) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return holidayMemos.get(year)!;
   }
   try {

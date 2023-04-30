@@ -46,7 +46,7 @@ function Holiday({ value }: { value: DateCell }) {
 export const CalenderDayDetail = memo(({ value }: { value: DateCell }) => {
   const weekIndex = value.week === 0 ? 6 : value.week - 1;
   return (
-    <div className="bg-secondary-800 w-full text-white inline-flex flex-col text-xl py-5 px-10 opacity-95">
+    <div className="inline-flex w-full flex-col bg-secondary-800 px-10 py-5 text-xl text-white opacity-95">
       <div data-testid="calender-day-pop-title">
         {`${value.year}年${value.month}月${value.date}日 星期${WEEK_NAMES[weekIndex]} 第 ${value.weekIndex} 周`}
       </div>

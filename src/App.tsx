@@ -37,6 +37,7 @@ export function App() {
     const { dataset } = hoverEventState.target as HTMLElement;
     const isHoverCalenderDay = dataset && "calenderDay" in dataset;
     if (isHoverCalenderDay) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const data = dataset.calenderDay!.split("-");
       // 如果超出屏幕右侧，则显示在鼠标左侧
       let positionX = hoverEventState.clientX + OPO_OFFSET;
@@ -58,17 +59,19 @@ export function App() {
     return monthData[hoverPosition[0]][hoverPosition[1]][hoverPosition[2]];
   }, [monthData, hoverPosition]);
 
+  const dayPropClassName = `detail-day-${transitionString}`;
+
   return (
     <div className="w-10/12">
       <Logo />
       <CalendarHeader year={year} />
-      <div ref={ref} className="grid calender-content">
+      <div ref={ref} className="calender-content grid">
         <CalendarYear value={monthData} />
       </div>
       <CalenderDayPopup
         value={hoverPositionValue}
         position={hoverPosition ? [hoverPosition[3], hoverPosition[4]] : [0, 0]}
-        className={`detail-pop-${transitionString}`}
+        className={dayPropClassName}
       />
     </div>
   );
@@ -76,7 +79,7 @@ export function App() {
 
 const Logo = memo(() => {
   return (
-    <div className="h-16 w-64 bg-primary-700 text-secondary-100 font-black flex items-center justify-center">
+    <div className="flex h-16 w-64 items-center justify-center bg-primary-700 font-black text-secondary-100">
       CALENDAR
     </div>
   );
@@ -84,8 +87,8 @@ const Logo = memo(() => {
 
 const CalendarHeader = memo(({ year }: { year: number }) => {
   return (
-    <h1 className="font-black text-4xl my-10 text-secondary-600">
-      <label className="border-b border-b-secondary-700 border-dashed cursor-pointer mx-1">
+    <h1 className="my-10 text-4xl font-black text-secondary-600">
+      <label className="mx-1 cursor-pointer border-b border-dashed border-b-secondary-700">
         {year}
       </label>
       年日历<label className="hidden tablet:inline">及节假日</label>
@@ -123,16 +126,16 @@ function CalenderDayPopup({
   }
   if (isMobileDevice()) {
     return (
-      <div className="fixed left-0 bottom-0 right-0 ">
+      <div className="fixed inset-x-0 bottom-0">
         <CalenderDayDetail value={value} />
-        <div className="absolute right-2 top-2 text-white bg-secondary-700">
+        <div className="absolute right-2 top-2 bg-secondary-700 text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className="h-6 w-6"
           >
             <path
               strokeLinecap="round"
@@ -146,7 +149,7 @@ function CalenderDayPopup({
   }
   return (
     <div
-      className={`fixed top-0 left-0 ${className}`}
+      className={`fixed left-0 top-0 ${className}`}
       style={{
         transform: `translate(${position[0]}px, ${position[1]}px)`,
         width: POP_WIDTH,
