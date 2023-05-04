@@ -50,11 +50,11 @@ export function useHover({
   }, []);
 
   useEffect(() => {
-    target.current?.addEventListener("mousemove", handleTargetHover);
+    window.addEventListener("mousemove", handleTargetHover);
     target.current?.addEventListener("mouseleave", handleClearHoverEvent);
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      target.current?.removeEventListener("mousemove", handleTargetHover);
+      window.removeEventListener("mousemove", handleTargetHover);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       target.current?.removeEventListener("mouseleave", handleClearHoverEvent);
       mouseOutTimeoutId.current && clearTimeout(mouseOutTimeoutId.current);
