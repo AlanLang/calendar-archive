@@ -18,7 +18,7 @@ describe("MonthCalendar view", () => {
 
   it("should be red border when today", () => {
     const today = new Date();
-    const result = getMonthCalder(2023, 4);
+    const result = getMonthCalder(2023, today.getMonth() + 1);
     render(<MonthCalendar data={result} />);
     expect(screen.getByText(today.getDate())).toHaveClass(
       "flex justify-center items-center h-full w-full cursor-pointer border-3 border-solid border-primary-700 rounded-full hover:border-secondary-700"
