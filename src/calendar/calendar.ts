@@ -22,6 +22,7 @@ export interface DateCell {
   weekIndex: number;
   dateStr: string;
   holiday?: Holiday;
+  events: { name: string; id: string }[];
   position: [number, number];
   d: Date;
   ctx: {
@@ -87,6 +88,7 @@ export const calendar = Calendar.create({
         .padStart(2, "0")}`,
       ctx,
       d,
+      events: [],
     };
 
     if (ctx.year === year) {

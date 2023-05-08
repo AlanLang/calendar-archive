@@ -109,7 +109,7 @@ export function App() {
 
 const Logo = memo(() => {
   return (
-    <div className="flex h-16 w-64 items-center justify-center bg-primary-700 font-black text-secondary-100">
+    <div className="bg-primary-700 text-secondary-100 flex h-16 w-64 items-center justify-center font-black">
       CALENDAR
     </div>
   );
@@ -117,11 +117,11 @@ const Logo = memo(() => {
 
 const CalendarHeader = memo(({ year }: { year: number }) => {
   return (
-    <h1 className="my-10 text-4xl font-black text-secondary-600">
-      <label className="mx-1 cursor-pointer border-b border-dashed border-b-secondary-700">
+    <h1 className="text-secondary-600 my-10 text-4xl font-black">
+      <label className="border-b-secondary-700 mx-1 cursor-pointer border-b border-dashed">
         {year}
       </label>
-      年日历<label className="hidden tablet:inline">及节假日</label>
+      年日历<label className="tablet:inline hidden">及节假日</label>
     </h1>
   );
 });
@@ -174,7 +174,7 @@ function CalenderDayPopup({
     return (
       <div className="fixed inset-x-0 bottom-0">
         <CalenderDayDetail value={value} marks={marks} />
-        <div className="absolute right-2 top-2 bg-secondary-700 text-white">
+        <div className="bg-secondary-700 absolute right-2 top-2 text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
