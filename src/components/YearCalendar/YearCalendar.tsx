@@ -1,5 +1,6 @@
 import { DateCell } from "../../calendar/calendar";
 import classNames from "classnames";
+import { Mark } from "../DayDetail/DayDetail";
 
 export interface YearCalendarProps {
   data: {
@@ -7,9 +8,16 @@ export interface YearCalendarProps {
     days: DateCell[];
   }[];
   onClick?: (date: DateCell) => void;
+  selected?: DateCell | null;
+  marks: Mark[];
 }
 
-export default function YearCalendar({ data, onClick }: YearCalendarProps) {
+export default function YearCalendar({
+  data,
+  onClick,
+  selected,
+  marks,
+}: YearCalendarProps) {
   return (
     <div className="bg-white">
       <div className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4">
@@ -50,24 +58,37 @@ export default function YearCalendar({ data, onClick }: YearCalendarProps) {
                     dateTime={day.dateStr}
                     className={classNames(
                       day.isToday && "bg-indigo-600 font-semibold text-white",
+                      {
+                        "bg-gray-600 font-semibold text-white":
+                          selected &&
+                          day.isCurrentMonth &&
+                          selected.dateStr === day.dateStr,
+                      },
                       "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
                     )}
                   >
                     {day.date}
                   </time>
-                  {day.isCurrentMonth && (
-                    <div className="flex h-2 items-center justify-center">
-                      {day.holiday && (
-                        <div
-                          className={classNames(
-                            "inline-block h-1.5 w-1.5 rounded-full ",
-                            { "bg-cyan-400": day.holiday.isOffDay },
-                            { "bg-gray-400": !day.holiday.isOffDay }
-                          )}
-                        />
-                      )}
-                    </div>
-                  )}
+                  <div className="flex h-2 items-center justify-center">
+                    {day.isCurrentMonth && day.holiday && (
+                      <div
+                        className={classNames(
+                          "inline-block h-1.5 w-1.5 rounded-full ",
+                          { "bg-cyan-400": day.holiday.isOffDay },
+                          { "bg-gray-400": !day.holiday.isOffDay }
+                        )}
+                      />
+                    )}
+                    {day.isCurrentMonth &&
+                      marks
+                        .filter((item) => item.date.dateStr === day.dateStr)
+                        .map((item) => (
+                          <div
+                            key={item.name}
+                            className="inline-block h-1.5 w-1.5 rounded-full bg-green-400"
+                          ></div>
+                        ))}
+                  </div>
                 </button>
               ))}
             </div>

@@ -4,13 +4,26 @@ import YearCalendar, {
 } from "./components/YearCalendar/YearCalendar";
 import { getMonthCalder, now } from "./calendar";
 import { YearHeader } from "./components/YearCalendar/Header";
-import DayDetail from "./components/DayDetail/DayDetail";
+import DayDetail, { Mark } from "./components/DayDetail/DayDetail";
 import { DateCell } from "./calendar/calendar";
+import MarkEditModal from "./components/MarkEditModal/MarkEditModal";
+
+const CALENDAR_CONFIG = "CALENDAR_CONFIG";
 
 export function App() {
   const [data, setData] = useState<YearCalendarProps["data"]>([]);
   const [year, setYear] = useState<number>(now.getFullYear());
   const [selected, setSelected] = useState<DateCell | null>(null);
+  const config = localStorage.getItem(CALENDAR_CONFIG);
+  const defaultMarks = config ? JSON.parse(config).marks : [];
+  const [marks, setMarks] = useState<Mark[]>(defaultMarks);
+  const [markEditModalVisible, setMarkEditModalVisible] =
+    useState<boolean>(false);
+
+  const saveMarks = (value: Mark[]) => {
+    setMarks(value);
+    localStorage.setItem(CALENDAR_CONFIG, JSON.stringify({ marks: value }));
+  };
 
   const getMonthCalderData = useCallback(() => {
     const data: YearCalendarProps["data"] = [];
@@ -37,6 +50,8 @@ export function App() {
       ></YearHeader>
       <YearCalendar
         data={data}
+        marks={marks}
+        selected={selected}
         onClick={(value) => {
           setSelected(value);
         }}
@@ -45,6 +60,15 @@ export function App() {
         day={selected}
         onClose={() => {
           setSelected(null);
+        }}
+        onMarkClick={() => {
+          setMarkEditModalVisible(true);
+        }}
+      />
+      <MarkEditModal
+        open={markEditModalVisible}
+        onClose={() => {
+          setMarkEditModalVisible(false);
         }}
       />
     </div>
