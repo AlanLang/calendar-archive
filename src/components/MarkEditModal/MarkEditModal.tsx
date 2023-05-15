@@ -1,13 +1,21 @@
 import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import MarkEdit from "./MrakEdit";
+import { Mark } from "../DayDetail/DayDetail";
+import { DateCell } from "../../calendar/calendar";
 
 export default function MarkEditModal({
   open,
   onClose,
+  value,
+  onChange,
+  date,
 }: {
   open: boolean;
+  value: Mark[];
   onClose: () => void;
+  onChange: (value: Mark[]) => void;
+  date: DateCell;
 }) {
   const cancelButtonRef = useRef(null);
 
@@ -44,7 +52,7 @@ export default function MarkEditModal({
             >
               <Dialog.Panel className="relative overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div className="p-5">
-                  <MarkEdit />
+                  <MarkEdit date={date} value={value} onChange={onChange} />
                 </div>
               </Dialog.Panel>
             </Transition.Child>

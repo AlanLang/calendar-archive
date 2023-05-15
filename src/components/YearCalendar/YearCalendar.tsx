@@ -69,7 +69,7 @@ export default function YearCalendar({
                   >
                     {day.date}
                   </time>
-                  <div className="flex h-2 items-center justify-center">
+                  <div className="mt-1 flex h-2 items-center justify-center">
                     {day.isCurrentMonth && day.holiday && (
                       <div
                         className={classNames(

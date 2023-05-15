@@ -2,13 +2,32 @@ import { Fragment, useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 import { DateCell } from "../../calendar/calendar";
-import { diffToday } from "../../calendar/day";
+import { diffDay, diffToday } from "../../calendar/day";
 import { diffHolidayByToday } from "../../calendar/holiday";
 import classNames from "classnames";
 export interface Mark {
   name: string;
   color: string;
   date: DateCell;
+}
+
+function MarkDetailContent({ marks, day }: { marks: Mark[]; day: DateCell }) {
+  return (
+    <>
+      {marks.map((item) => {
+        const dayNum = diffDay(item.date.d, day.d);
+        return (
+          <div>
+            <p className="mt-1 text-sm text-gray-500">
+              {item.name}
+              <label className="mx-0.5">{Math.abs(dayNum)}</label>
+              <label className="mx-0.5">天{dayNum > 0 ? "后" : "前"}</label>
+            </p>
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 function DayDetailContent({ day }: { day: DateCell }) {
@@ -31,6 +50,7 @@ export default function DayDetail(props: {
   day: DateCell | null;
   onClose: () => void;
   onMarkClick: () => void;
+  marks: Mark[];
 }) {
   const [show, setShow] = useState(!!props.day);
   const { day } = props;
@@ -73,6 +93,12 @@ export default function DayDetail(props: {
                   </div>
                   <div className="ml-3 w-0 flex-1">
                     {day && <DayDetailContent day={day} />}
+                    {day && (
+                      <MarkDetailContent
+                        marks={props.marks}
+                        day={day}
+                      ></MarkDetailContent>
+                    )}
                   </div>
                 </div>
               </div>
@@ -97,6 +123,7 @@ export default function DayDetail(props: {
                       className="flex w-full items-center justify-center rounded-none rounded-br-lg border border-transparent px-4 py-3 text-sm font-medium text-gray-700 hover:text-gray-500"
                       onClick={() => {
                         setShow(false);
+                        props.onClose();
                       }}
                     >
                       关闭

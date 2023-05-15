@@ -1,41 +1,39 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { MinusIcon } from "@heroicons/react/20/solid";
+import { Mark } from "../DayDetail/DayDetail";
+import { useState } from "react";
+import classNames from "classnames";
+import { DateCell } from "../../calendar/calendar";
 
-const people = [
-  {
-    name: "Lindsay Walton",
-    role: "Front-end Developer",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Courtney Henry",
-    role: "Designer",
-    imageUrl:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Tom Cook",
-    role: "Director of Product",
-    imageUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-];
+export default function MarkEdit({
+  value,
+  date,
+  onChange,
+}: {
+  value: Mark[];
+  date: DateCell;
+  onChange: (value: Mark[]) => void;
+}) {
+  const [inputValue, setInputValue] = useState("");
 
-export default function MarkEdit() {
+  const enableSubmit =
+    inputValue !== "" && !value.some((item) => item.name === inputValue);
+
+  const handleMinusIconClick = (name: string) => {
+    onChange(value.filter((item) => item.name !== name));
+  };
+
+  const handleSubmit = () => {
+    onChange([
+      ...value,
+      {
+        name: inputValue,
+        date,
+        color: "red",
+      },
+    ]);
+    setInputValue("");
+  };
+
   return (
     <div className="mx-auto max-w-lg">
       <div>
@@ -69,10 +67,18 @@ export default function MarkEdit() {
             id="markName"
             className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             placeholder="请输入标记名称"
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value.trim());
+            }}
           />
           <button
             type="submit"
-            className="ml-4 shrink-0 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            disabled={!enableSubmit}
+            onClick={handleSubmit}
+            className={classNames(
+              "disabled:opacity-50 ml-4 shrink-0 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            )}
           >
             添加
           </button>
@@ -86,25 +92,19 @@ export default function MarkEdit() {
           role="list"
           className="mt-4 divide-y divide-gray-200 border-y border-gray-200"
         >
-          {people.map((person, personIdx) => (
+          {value.map((item, personIdx) => (
             <li
               key={personIdx}
               className="flex items-center justify-between space-x-3 py-4"
             >
               <div className="flex min-w-0 flex-1 items-center space-x-3">
-                <div className="shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={person.imageUrl}
-                    alt=""
-                  />
-                </div>
+                <div className="shrink-0">LOGO</div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-gray-900">
-                    {person.name}
+                    {item.name}
                   </p>
                   <p className="truncate text-sm font-medium text-gray-500">
-                    {person.role}
+                    {item.color}
                   </p>
                 </div>
               </div>
@@ -116,6 +116,9 @@ export default function MarkEdit() {
                   <MinusIcon
                     className="mr-2 h-5 w-5 text-gray-400 hover:bg-gray-200"
                     aria-hidden="true"
+                    onClick={() => {
+                      handleMinusIconClick(item.name);
+                    }}
                   />
                 </button>
               </div>

@@ -40,6 +40,7 @@ export function App() {
     setData(getMonthCalderData());
   }, [getMonthCalderData]);
 
+  console.log(selected);
   return (
     <div>
       <YearHeader
@@ -57,6 +58,7 @@ export function App() {
         }}
       ></YearCalendar>
       <DayDetail
+        marks={marks}
         day={selected}
         onClose={() => {
           setSelected(null);
@@ -65,12 +67,23 @@ export function App() {
           setMarkEditModalVisible(true);
         }}
       />
-      <MarkEditModal
-        open={markEditModalVisible}
-        onClose={() => {
-          setMarkEditModalVisible(false);
-        }}
-      />
+      {selected && (
+        <MarkEditModal
+          date={selected}
+          value={marks.filter((item) => item.date.dateStr === selected.dateStr)}
+          onChange={(value) => {
+            saveMarks(
+              marks
+                .filter((item) => item.date.dateStr !== selected.dateStr)
+                .concat(value)
+            );
+          }}
+          open={markEditModalVisible}
+          onClose={() => {
+            setMarkEditModalVisible(false);
+          }}
+        />
+      )}
     </div>
   );
 }
