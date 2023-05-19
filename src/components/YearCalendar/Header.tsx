@@ -18,9 +18,6 @@ export function YearHeader({
   return (
     <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
       <h1 className="text-base font-semibold leading-6 text-gray-900">
-        <time dateTime={value.toLocaleString()}>{value}</time>
-      </h1>
-      <div className="flex items-center">
         <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
           <div
             className="pointer-events-none absolute inset-0 rounded-md ring-1 ring-inset ring-gray-300"
@@ -56,7 +53,8 @@ export function YearHeader({
             />
           </button>
         </div>
-      </div>
+      </h1>
+      <div className="flex items-center"></div>
     </header>
   );
 }

@@ -20,8 +20,12 @@ function MarkDetailContent({ marks, day }: { marks: Mark[]; day: DateCell }) {
           <div>
             <p className="mt-1 text-sm text-gray-500">
               {item.name}
-              <label className="mx-0.5">{Math.abs(dayNum)}</label>
-              <label className="mx-0.5">天{dayNum > 0 ? "后" : "前"}</label>
+              {dayNum !== 0 && (
+                <>
+                  <label className="mx-0.5">{Math.abs(dayNum)}</label>
+                  <label className="mx-0.5">天{dayNum > 0 ? "后" : "前"}</label>
+                </>
+              )}
             </p>
           </div>
         );
@@ -52,14 +56,19 @@ export default function DayDetail(props: {
   onMarkClick: () => void;
   marks: Mark[];
 }) {
-  const [show, setShow] = useState(!!props.day);
-  const { day } = props;
+  const [show, setShow] = useState(false);
+  const [showDay, setShowDay] = useState(props.day);
+  const day = showDay;
 
   useEffect(() => {
     if (props.day) {
+      setShowDay(props.day);
       setShow(true);
     } else {
       setShow(false);
+      setTimeout(() => {
+        setShowDay(null);
+      }, 300);
     }
   }, [props.day]);
 
@@ -122,7 +131,6 @@ export default function DayDetail(props: {
                       type="button"
                       className="flex w-full items-center justify-center rounded-none rounded-br-lg border border-transparent px-4 py-3 text-sm font-medium text-gray-700 hover:text-gray-500"
                       onClick={() => {
-                        setShow(false);
                         props.onClose();
                       }}
                     >
