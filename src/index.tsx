@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 import React from "react";
-import "./index.css";
 import { App } from "./App";
+import "./index.css";
 
 const appDom = document.getElementById("app");
 if (appDom) {

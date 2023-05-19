@@ -1,6 +1,4 @@
 # Calendar
-![](https://vip2.loli.io/2023/04/29/vs3T8CYQLJnruyq.jpg)
-![](https://vip2.loli.io/2023/04/30/E3buogrK6Z1hPlJ.jpg)
 
 ## 使用
 直接访问 [alanlang.github.io/calendar/](https://alanlang.github.io/calendar/)
