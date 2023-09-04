@@ -57,7 +57,9 @@ export default function YearCalendar({
                   <time
                     dateTime={day.dateStr}
                     className={classNames(
-                      day.isToday && "bg-indigo-600 font-semibold text-white",
+                      day.isToday &&
+                        day.isCurrentMonth &&
+                        "bg-indigo-600 font-semibold text-white",
                       {
                         "bg-gray-600 font-semibold text-white":
                           selected &&
