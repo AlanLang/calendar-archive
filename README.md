@@ -1,4 +1,6 @@
 # Calendar
+> [!CAUTION]
+> 该仓库已经不再维护，新版本请访问 [alanlang/calendar](https://github.com/AlanLang/calendar)
 
 ## 开始使用
 直接访问 [alanlang.github.io/calendar/](https://alanlang.github.io/calendar/)
